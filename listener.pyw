@@ -3,7 +3,7 @@ import logging
 import re
 from tkinter import *
 import os, subprocess
-import popup
+#import popup
 
 #label = Label(master, text="This is our first GUI!")
 #greet_button = Button(master, text="Greet", command=self.greet)
@@ -56,8 +56,8 @@ def on_press(key):
     if press_record[0]+press_record[1]+press_record[2] == 'Key.ctrl_rKey.ctrl_lKey.ctrl_r':
         if not listening:
             
-            popup.create(script_codex)
-            #run("popup.exe")
+            #popup.create(script_codex)
+            run("popup.exe")
             listening = True
       
     if listening:
