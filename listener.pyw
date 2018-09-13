@@ -3,13 +3,13 @@ import logging
 import re
 from tkinter import *
 import os, subprocess
-#import popup
+import popup
 
 #label = Label(master, text="This is our first GUI!")
 #greet_button = Button(master, text="Greet", command=self.greet)
 #close_button = Button(master, text="Close", command=master.quit)
 
-
+script_codex = [("hello.exe","26"),("test.py","45")]
 def Main():
    with Listener(on_press=on_press) as listener:
     listener.join()
@@ -44,7 +44,7 @@ press_record = [""] * 11
 def on_press(key):
     key = str(key)
     if "'" in key:
-        key = key.replace("'","")  
+      key = key.replace("'","")  
     global press_record
 
     press_record.insert(0,key)
@@ -55,14 +55,15 @@ def on_press(key):
     global listening
     if press_record[0]+press_record[1]+press_record[2] == 'Key.ctrl_rKey.ctrl_lKey.ctrl_r':
         if not listening:
-            #popup.create()
-            run("popup.exe")
+            
+            popup.create(script_codex)
+            #run("popup.exe")
             listening = True
       
     if listening:
         if key == "Key.esc":
             print(press_record)
 
-
-Main()
+if __name__ == "__main__":
+   Main()
 
