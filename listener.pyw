@@ -9,7 +9,7 @@ import os, subprocess
 #greet_button = Button(master, text="Greet", command=self.greet)
 #close_button = Button(master, text="Close", command=master.quit)
 
-script_codex = [("hello.exe","26"),("test.py","45")]
+script_codex = [("hello.exe","26"),("test.exe","45")]
 def Main():
    with Listener(on_press=on_press) as listener:
     listener.join()

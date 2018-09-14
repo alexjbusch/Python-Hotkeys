@@ -4,9 +4,13 @@ import re
 from tkinter import *
 import os, subprocess
 from functools import partial
-from listener import script_codex,run
+from listener import script_codex
 
 tk = None
+
+def run(file_name):
+    os.startfile(os.path.dirname(os.path.realpath(__file__))+"\\"+file_name)
+    
 def create(script_codex):
    print(script_codex)
    global tk
