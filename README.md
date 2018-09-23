@@ -2,7 +2,10 @@
 A collection of convenient python scripts that can be called via hotkeys.
 
 ### Instructions For Use
-To start the listener, simply run listener.pyw, which initially listens only for the activation hotkey. The activation hotkey is "CTRL_RIGHT  CTRL_LEFT  CTRL_RIGHT", which when pressed will bring up the gui and begin listening for hotkeys tied to scripts.  From the gui you can run default scripts, add your own, modify existing hotkeys, and most importantly trigger scripts via keypresses.  Be advised that listener.pyw doesn't terminate after the gui is closed, so currently it will have to be closed manually from task manager or the terminal.  Future updates will include a config file and/or a settings gui that will let you change the activation hotkey, select preferences for when the listener terminates, and toggle whether the gui pops up or not.
+To start the listener, simply run listener.pyw, which initially listens only for the activation hotkey. The activation hotkey defaults to "CTRL_RIGHT  CTRL_LEFT  CTRL_RIGHT", and when pressed will bring up the gui and begin listening for hotkeys tied to scripts.  From the gui you can run default scripts, add your own, modify existing hotkeys, and most importantly trigger scripts via keypresses. Be advised that listener.pyw doesn't terminate after the gui is closed by default, so it will have to be closed manually from task manager or the terminal.  
+
+### Settings
+The activation hotkey, as well as preferences for when the listener terminates, whether the gui pops up or not, and whether the gui closes upon script execution are all editable from the file settings.py.  If you wish to edit the default hotkey manually in settings.py, please use pynput key codes, which can be found here: https://pythonhosted.org/pynput/keyboard.html.  Please note that the beginning parts of the key codes are unnecessary, so "pynput.keyboard.Key.num_lock" should be rendered simply as the string "num_lock" in the activation hotkey list.  Future versions will include a gui for changing the settings. 
 
 Python-Hotkeys lets you create your own hotkeys and bind them however you want, but the following scripts have been added as defaults:
 ## test.py

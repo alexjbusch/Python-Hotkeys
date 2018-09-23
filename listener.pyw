@@ -7,12 +7,16 @@ import os, subprocess
 from functools import partial
 from threading import Timer
 import os
+import settings
 
+# ordinary globals
 root = None
 listening = False
 editing_hotkey = False
 object_being_edited = None
 gui_enabled = True
+
+
 
 ###  EXTERNAL SCRIPT VARIABLES START HERE
 start_reapeating = False
@@ -22,7 +26,6 @@ start_reapeating = False
 
 ### this hotkey triggers the listener for other hotkeys and opens the gui if enabled
 ### TODO:  make this editable in a "settings" file or gui
-activation_hotkey = ['ctrl_r','ctrl_l','ctrl_r']
 
 press_record = [""] * 11
 
@@ -114,7 +117,7 @@ class Hotkey:
         
 ###  this is where default hotkeys are stored.  this line has to be called down here so that it has access to the hotkey class
 hotkey_codex = [Hotkey("test.py",["+","+","5"],0),Hotkey("sitRepScript.pyw",["+","+","6"],1)]
- 
+
 
 def Main():
     # this is where tkinter and pynput are threaded
@@ -122,7 +125,17 @@ def Main():
     t.start()
     with Listener(on_release=on_release) as listener:
         listener.join()
-      
+
+def on_gui_close():
+    if settings.kill_script_on_gui_close:
+        os._exit(0)  # TODO: CONSIDER CHANGING TO SYS.EXIT SOMEHOW
+    elif settings.stop_listening_on_gui_close:
+        global listening
+        listening = False
+        root.destroy()
+        create_popup()
+
+    
 def create_popup():
     # tkinter is initialized here
     global root
@@ -136,6 +149,7 @@ def create_popup():
     root.title("Central Command Menu")
     root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
     root.withdraw()
+    root.protocol("WM_DELETE_WINDOW", on_gui_close)
     root.mainloop()
 
 def add_new_hotkey():
@@ -152,7 +166,9 @@ def add_new_hotkey():
 def run(file_name):
     if file_name != "":
         try:
-            os.startfile(os.path.dirname(os.path.realpath(__file__))+"\\"+file_name)
+            os.startfile(os.path.dirname(os.path.realpath(__file__))+"\\scripts\\"+file_name)
+            if settings.exit_gui_on_script_execution:
+                root.destroy()
         except FileNotFoundError:
             messagebox.showinfo("File Not Found", "No file found by the name " + file_name)
     else:
@@ -192,11 +208,11 @@ def handle_keys(key):
                 object_being_edited.hotkey_text.config(text=" ".join(object_being_edited.hotkey))
 
         else:
-            if press_record[0:3] == activation_hotkey:
+            if press_record[0:3] == settings.activation_hotkey:
                 listening = True
                 press_record = [""] * 11
                 ### gui is turned on here
-                if gui_enabled:
+                if settings.gui_enabled:
                     root.deiconify()
 
     elif listening:
@@ -209,7 +225,7 @@ def handle_keys(key):
             start_repeating = True
         else:
             for i in hotkey_codex:
-                
+                # TODO: MAKE ACTIVATION HOTKEY VARIABLE LENGTH
                 if "".join(press_record[0:3]) == "".join(reversed(i.hotkey)):
                     press_record = [""] * 11
                     run(i.script_name)
