@@ -42,6 +42,9 @@ def open_chrome(url):
 def set_current_all():
     status_dict["xkcd"] = get_current_xkcd()
     ###  TODO ADD MORE SITES TO CHECK AND SET THEM CURRENT HERE
+
+def set_almost_current_all():
+    status_dict["xkcd"] = get_current_xkcd()-1
     
 def load_data():
     try:
@@ -52,7 +55,7 @@ def load_data():
         except (EOFError,pickle.UnpicklingError):
             set_current_all()
     except FileNotFoundError:
-        set_current_all()
+        set_almost_current_all()
         
 def make_report():
     new_xkcd = xkcd_status()
