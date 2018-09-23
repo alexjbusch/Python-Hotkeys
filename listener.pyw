@@ -14,6 +14,12 @@ editing_hotkey = False
 object_being_edited = None
 gui_enabled = True
 
+###  EXTERNAL SCRIPT VARIABLES START HERE
+start_reapeating = False
+
+###  END EXTERNAL SCRIPT VARS
+
+
 ### this hotkey triggers the listener for other hotkeys and opens the gui if enabled
 ### TODO:  make this editable in a "settings" file or gui
 activation_hotkey = ['ctrl_r','ctrl_l','ctrl_r']
@@ -107,7 +113,7 @@ class Hotkey:
         self.script_name_text.grid(row=self.row,column=1)
         
 ###  this is where default hotkeys are stored.  this line has to be called down here so that it has access to the hotkey class
-hotkey_codex = [Hotkey("hello.py",["+","+","6"],0),Hotkey("test.py",["+","+","5"],1)]
+hotkey_codex = [Hotkey("test.py",["+","+","5"],0),Hotkey("sitRepScript.pyw",["+","+","6"],1)]
  
 
 def Main():
@@ -199,7 +205,8 @@ def handle_keys(key):
             #emergency_shutdown()
             root.destroy()
             listening = False
-        
+        elif key == "space":
+            start_repeating = True
         else:
             for i in hotkey_codex:
                 
