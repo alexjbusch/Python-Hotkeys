@@ -16,10 +16,10 @@ editing_hotkey = False
 object_being_edited = None
 gui_enabled = True
 
-
-
+from scripts import repeaterScript
+repeaterScript.import_only = False
 ###  EXTERNAL SCRIPT VARIABLES START HERE
-start_reapeating = False
+start_repeating = False
 
 ###  END EXTERNAL SCRIPT VARS
 
@@ -195,6 +195,8 @@ def handle_keys(key):
     print(key)
 
     if not listening:
+        if key == "space":
+            repeaterScript.test_bool = True
         if editing_hotkey and object_being_edited != None:
             hotkey_full = True
             for i in range(len(object_being_edited.hotkey)):              
