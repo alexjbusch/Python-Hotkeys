@@ -7,6 +7,8 @@ import os, subprocess
 from functools import partial
 from threading import Timer
 import os
+import json
+
 import settings
 
 # ordinary globals
@@ -16,11 +18,11 @@ editing_hotkey = False
 object_being_edited = None
 gui_enabled = True
 
-from scripts import repeaterScript
-repeaterScript.import_only = False
-###  EXTERNAL SCRIPT VARIABLES START HERE
-start_repeating = False
 
+###  EXTERNAL SCRIPT VARIABLES START HERE
+script_data = {"start_repeating":False,"test_var":False}
+with open('scripts//script_data.txt', 'w') as outfile:
+    json.dump(script_data, outfile)
 ###  END EXTERNAL SCRIPT VARS
 
 
@@ -116,7 +118,8 @@ class Hotkey:
         self.script_name_text.grid(row=self.row,column=1)
         
 ###  this is where default hotkeys are stored.  this line has to be called down here so that it has access to the hotkey class
-hotkey_codex = [Hotkey("test.py",["+","+","5"],0),Hotkey("sitRepScript.pyw",["+","+","6"],1)]
+###  CONSIDER: moving this to json
+hotkey_codex = [Hotkey("test.py",["+","+","5"],0),Hotkey("repeaterScript.pyw",["+","+","6"],1)]
 
 
 def Main():
@@ -129,11 +132,10 @@ def Main():
 def on_gui_close():
     if settings.kill_script_on_gui_close:
         os._exit(0)  # TODO: CONSIDER CHANGING TO SYS.EXIT SOMEHOW
-    elif settings.stop_listening_on_gui_close:
-        global listening
-        listening = False
-        root.destroy()
-        create_popup()
+    global listening
+    listening = False
+    root.destroy()
+    create_popup()
 
     
 def create_popup():
@@ -195,8 +197,6 @@ def handle_keys(key):
     print(key)
 
     if not listening:
-        if key == "space":
-            repeaterScript.test_bool = True
         if editing_hotkey and object_being_edited != None:
             hotkey_full = True
             for i in range(len(object_being_edited.hotkey)):              
@@ -220,19 +220,20 @@ def handle_keys(key):
     elif listening:
         if key == "esc":
             ### TODO: find out how to cancel running scripts via hotkeys
+            ### POSSIBLE SOLUTION: use json variables to order self termination
             #emergency_shutdown()
             root.destroy()
             listening = False
         elif key == "space":
-            start_repeating = True
+            script_data["start_repeating"] = True
+            with open('scripts//script_data.txt', 'w') as outfile:
+                json.dump(script_data, outfile)
         else:
             for i in hotkey_codex:
                 # TODO: MAKE ACTIVATION HOTKEY VARIABLE LENGTH
                 if "".join(press_record[0:3]) == "".join(reversed(i.hotkey)):
                     press_record = [""] * 11
                     run(i.script_name)
-    
 
-if __name__ == "__main__":
-   Main()
+Main()
 
