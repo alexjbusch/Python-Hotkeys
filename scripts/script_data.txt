@@ -1,1 +1,1 @@
-{"start_repeating": false, "test_var": false}
+{"start_repeating": false, "test_var": false, "kill_switch": false}

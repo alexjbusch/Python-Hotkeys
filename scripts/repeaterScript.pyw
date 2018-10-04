@@ -22,9 +22,6 @@ settings = {"cycles":1,"time_after_click":1,"time_before_click":.1}
 root = None
 hm = None
 
-#make into class?
-#repetitions = None
-    
 def OnMouseEvent(event):   
     global finished
     if finished == False:
@@ -101,40 +98,49 @@ def onTextEntry(txt_box,global_var):
         prev_text = txt_box.get()[:-1]
         txt_box.delete(0, 'end')
         txt_box.insert(0,prev_text)
-def main():
+def create_popup():
     global root
     root = Tk()
     frame = Frame(root, bg='grey')
     root.title("repeaterScript")
-    #CONSIDER: MAKING THIS INTO A CLASS
+    #  repetiontions
     repetitions_var = StringVar()
     repetitions = Entry(root, textvariable=repetitions_var)
-    repetitions.insert(END, str(settings["cycles"]))
-    repetitions.grid(row=0,column=1)
+    repetitions.insert(END, str(settings["cycles"]))   
     repetitions_var.trace("w", lambda name, index, mode, sv=repetitions_var: onTextEntry(repetitions,"cycles"))
-
+    #  time before
     time_before_var = StringVar()
     time_before_box = Entry(root, textvariable=time_before_var)
-    time_before_box.insert(END, str(settings["time_before_click"]))
-    time_before_box.grid(row=1,column=1)
+    time_before_box.insert(END, str(settings["time_before_click"]))    
     time_before_var.trace("w", lambda name, index, mode, sv=time_before_var: onTextEntry(time_before_box,"time_before_click"))
-
+    #  time after
     time_after_var = StringVar()
     time_after_box = Entry(root, textvariable=time_after_var)
-    time_after_box.insert(END, str(settings["time_after_click"]))
-    time_after_box.grid(row=3,column=1)
+    time_after_box.insert(END, str(settings["time_after_click"]))    
     time_after_var.trace("w", lambda name, index, mode, sv=time_before_var: onTextEntry(time_after_box,"time_after_click"))
-    '''
-    time_before_click_box = Text(root,height=2, width=3).grid(row=1,column=1)
-    time_after_click_box = Text(root,height=2, width=3).grid(row=2,column=1)
-    '''
-    Button(root,command=start_listening,text="Start Listening", padx=10).grid(row=3,column=2)
-   #print(root.winfo_children())
-
-    root.geometry("{0}x{1}+0+0".format(400, 500))
-    t = Timer(0, listen_for_instruction)
-    t.start()    
-    root.mainloop()
+    # text labels
+    repetitions_text = Label(root,text="Number of Repetitions")
+    time_before_text = Label(root,text="Time Before Click")
+    time_after_text = Label(root,text="Time After Click")
+    # button
+    start_listening_button = Button(root,command=start_listening,text="Start Listening", padx=10)
+    # grid positioning
+    repetitions.grid(row=0,column=1)
+    time_before_box.grid(row=1,column=1)
+    time_after_box.grid(row=2,column=1)
+    repetitions_text.grid(row=0,column=0)   
+    time_before_text.grid(row=1,column=0)
+    time_after_text.grid(row=2,column=0)
+    start_listening_button.grid(row=3,column=1)
     
+    root.geometry("{0}x{1}+0+0".format(400, 500))
+
+    
+def main():
+    create_popup()
+    t = Timer(0, listen_for_instruction)
+    t.start()
+    global root
+    root.mainloop()
 
 main()

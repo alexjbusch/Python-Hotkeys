@@ -17,19 +17,13 @@ listening = False
 editing_hotkey = False
 object_being_edited = None
 gui_enabled = True
-
+press_record = [""] * 11
 
 ###  EXTERNAL SCRIPT VARIABLES START HERE
-script_data = {"start_repeating":False,"test_var":False}
+script_data = {"start_repeating":False,"test_var":False,"kill_switch":False}
 with open('scripts//script_data.txt', 'w') as outfile:
     json.dump(script_data, outfile)
 ###  END EXTERNAL SCRIPT VARS
-
-
-### this hotkey triggers the listener for other hotkeys and opens the gui if enabled
-### TODO:  make this editable in a "settings" file or gui
-
-press_record = [""] * 11
 
 
 class Hotkey:
@@ -119,7 +113,7 @@ class Hotkey:
         
 ###  this is where default hotkeys are stored.  this line has to be called down here so that it has access to the hotkey class
 ###  CONSIDER: moving this to json
-hotkey_codex = [Hotkey("test.py",["+","+","5"],0),Hotkey("repeaterScript.pyw",["+","+","6"],1)]
+hotkey_codex = [Hotkey("test.py",["+","+","5"],0),Hotkey("repeaterScript.pyw",["+","+","6"],1),Hotkey("sitRepScript.pyw",["+","+","8"],2)]
 
 
 def Main():
