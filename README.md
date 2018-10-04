@@ -17,11 +17,11 @@ sitRepScript is meant to act as a centralized way to quickly check if media you'
 ## repeaterScript
 repeaterScript is a handy click automater that allows you to repeat a sequence of clicks an arbitrary number of times.  This allows you to automatically fill out certain forms, perform repetative actions in programs that aren't easily automated, cheat in certain clicker games, and assorted other oddball tasks.  
 
-	To use, first specify the number of times you want the pattern repeated and the time the computer should pause before and after clicks.  Then click the button that says start listening.  After this, the position of all your clicks will be recorded, and when you press spacebar (this hotkey might be modifiable in future versions) everywhere you clicked during the listening period will be clicked again in the same order. Future versions may also include support for right clicking and keyboard presses.
+To use, first specify the number of times you want the pattern repeated and the time the computer should pause before and after clicks.  Then click the button that says start listening.  After this, the position of all your clicks will be recorded, and when you press spacebar (this hotkey might be modifiable in future versions) everywhere you clicked during the listening period will be clicked again in the same order. Future versions may also include support for right clicking and keyboard presses.
 ### WARNING 
 Please note that while both pause times can be set to zero, they aren't set that way by default because your computer often needs a split second to load after you click something, and changing these values to zero can derail the automation so that it clicks before the thing you want it to click exists, sometimes with disastrous results.  It is highly advised that you test this script in a safe environment before using for an actual task.  
 
-	Another thing to be wary of is setting the number of repetitions too high, as cancelling the script mid execution is dangerous.  Currently, the best way to abort if something goes wrong is to kill the repeaterScript process itself, but if that is impossible without control of the mouse, then moving your cursor rapidly to the top left corner of your screen will cause the program to freeze, allowing you to abort it safely.  
+Another thing to be wary of is setting the number of repetitions too high, as cancelling the script mid execution is dangerous.  Currently, the best way to abort if something goes wrong is to kill the repeaterScript process itself, but if that is impossible without control of the mouse, then moving your cursor rapidly to the top left corner of your screen will cause the program to freeze, allowing you to abort it safely.  
 
 
 
