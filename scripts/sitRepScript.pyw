@@ -3,9 +3,10 @@ from urllib.request import urlopen
 from tkinter import *
 import webbrowser
 import pickle
+import time
+status_dict = {"xkcd":2047,"smbc":"September 9, 2018"}
 
-status_dict = {"xkcd":2047,"smbc":2}
-
+all_current = True
 
 def get_current_xkcd():
     main_page = urlopen("https://xkcd.com")
@@ -35,6 +36,26 @@ def xkcd_status():
         ###     no new comics, return None
         return
 
+def smbc_status():
+    start_time = time.time()
+    
+    soup = BeautifulSoup(urlopen("https://www.smbc-comics.com/comic/archive"),'html.parser')
+    archive = soup.find_all('option')
+    index = 0
+    for i in reversed(archive):
+        ###  found new comic, return tuple of url and string for the link
+        if status_dict["smbc"] in i.text:
+            if i != archive[-1]:
+                status_dict["smbc"] = archive[-1].text.split(" -")[0]
+                if index > 1:
+                    plural_s = "s"
+                else:
+                    plural_s = ""
+                return ("https://www.smbc-comics.com/"+str(i.next_sibling.attrs["value"]),(str(index)+" new unread smbc comic%s!"%plural_s))
+        index += 1
+    ### no new comics found, return None
+    return
+    #print(time.time() - start_time)
 
 def open_chrome(url):
     webbrowser.get('C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s').open(url)
@@ -56,14 +77,23 @@ def load_data():
             set_current_all()
     except FileNotFoundError:
         set_almost_current_all()
-        
+
+def make_link(link_string):
+    global all_current
+    all_current = False
+    link = Label(root, text=link_string[1], fg="blue", cursor="hand2")
+    link.pack()
+    link.bind("<Button-1>", lambda _: open_chrome(link_string[0]))
 def make_report():
     new_xkcd = xkcd_status()
+    new_smbc = smbc_status()
+    print(new_smbc)
     if new_xkcd != None:
-        link = Label(root, text=new_xkcd[1], fg="blue", cursor="hand2")
-        link.pack()
-        link.bind("<Button-1>", lambda _: open_chrome(new_xkcd[0]))
-    else:
+        make_link(new_xkcd)
+    if new_smbc != None:
+
+        make_link(new_smbc)
+    if all_current:
         link = Label(root, text="All Current")
         link.pack()
     ### TODO: ADD ADDITIONAL THINGS TO CHECK FOR BESIDES XKCD
@@ -84,7 +114,6 @@ def main():
     make_report()
 
     root.mainloop()
-
 
 root = Tk()
 main()
