@@ -1,10 +1,12 @@
 from bs4 import *
 from urllib.request import urlopen
+from urllib.error import *
+import re
 from tkinter import *
 import webbrowser
 import pickle
 import time
-status_dict = {"xkcd":2047,"smbc":"September 9, 2018"}
+status_dict = {"xkcd":2047,"smbc":"September 9, 2018",}
 
 all_current = True
 
@@ -57,6 +59,17 @@ def smbc_status():
     return
     #print(time.time() - start_time)
 
+def get_new_netflix_episodes(show):
+    
+    page = urlopen("https://www.netflix.com/title/"+str(show))
+    soup = BeautifulSoup(page,'html.parser')
+    scripts = soup.find_all("script")
+    episode_numbers = re.findall(r'\"episodeNum\":(.*?),',str(scripts[11]))
+    episode_links =re.findall(r'\"episodeId\":(.*?),',str(scripts[11]))
+
+    ### TODO: WRITE LOGIC HERE THAT CHECKS IF NEW EPISODES HAVE COME OUT SINCE THE LAST TIME YOU RAN THE SCRIPT
+    return ("https://www.netflix.com/watch/" + episode_links[-1],"the newest episode is ep. " + episode_numbers[-1])
+    
 def open_chrome(url):
     webbrowser.get('C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s').open(url)
 
@@ -85,6 +98,7 @@ def make_link(link_string):
     link.pack()
     link.bind("<Button-1>", lambda _: open_chrome(link_string[0]))
 def make_report():
+    print(get_new_netflix_episodes(80117365))
     new_xkcd = xkcd_status()
     new_smbc = smbc_status()
     print(new_smbc)
