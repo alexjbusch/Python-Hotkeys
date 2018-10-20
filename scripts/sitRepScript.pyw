@@ -6,7 +6,11 @@ from tkinter import *
 import webbrowser
 import pickle
 import time
-status_dict = {"xkcd":2047,"smbc":"September 9, 2018",}
+
+start_time = None
+
+status_dict = {"xkcd":2047,"smbc":"September 9, 2018","Better_Call_Saul":32}
+netflix_shows = {"Better_Call_Saul":80075595}
 
 all_current = True
 
@@ -74,11 +78,20 @@ def open_chrome(url):
     webbrowser.get('C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s').open(url)
 
 def set_current_all():
+    # xkcd
     status_dict["xkcd"] = get_current_xkcd()
-    ###  TODO ADD MORE SITES TO CHECK AND SET THEM CURRENT HERE
+    # smbc
+    soup = BeautifulSoup(urlopen("https://www.smbc-comics.com/comic/archive"),'html.parser')
+    archive = soup.find_all('option')
+    status_dict["smbc"] = archive[-1].text.split(" -")[0]
 
 def set_almost_current_all():
+    # xkcd
     status_dict["xkcd"] = get_current_xkcd()-1
+    # smbc
+    soup = BeautifulSoup(urlopen("https://www.smbc-comics.com/comic/archive"),'html.parser')
+    archive = soup.find_all('option')
+    status_dict["smbc"] = archive[-2].text.split(" -")[0]
     
 def load_data():
     try:
@@ -98,19 +111,20 @@ def make_link(link_string):
     link.pack()
     link.bind("<Button-1>", lambda _: open_chrome(link_string[0]))
 def make_report():
-    print(get_new_netflix_episodes(80117365))
+    print(get_new_netflix_episodes(netflix_shows["Better_Call_Saul"]))
+    ### TODO: test this on another machine
     new_xkcd = xkcd_status()
     new_smbc = smbc_status()
     print(new_smbc)
     if new_xkcd != None:
         make_link(new_xkcd)
     if new_smbc != None:
-
         make_link(new_smbc)
     if all_current:
         link = Label(root, text="All Current")
         link.pack()
-    ### TODO: ADD ADDITIONAL THINGS TO CHECK FOR BESIDES XKCD
+    print(time.time()-start_time)
+    
     
 def save():
     outfile = open("sitRep_data.txt",'wb')
@@ -119,6 +133,8 @@ def save():
     root.destroy()
 
 def main():
+    global start_time
+    start_time = time.time()
     frame = Frame(root, bg='grey')
     root.title("Sit Rep")
     root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
